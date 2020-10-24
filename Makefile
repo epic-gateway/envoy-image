@@ -1,8 +1,9 @@
-PREFIX = acnodal
+REPO=registry.gitlab.com/acnodal
+PREFIX = envoy-for-egw
 SUFFIX = ${USER}-dev
 SHELL:=/bin/bash
 
-TAG=${PREFIX}/envoy-for-egw:${SUFFIX}
+TAG=${REPO}/${PREFIX}:${SUFFIX}
 DOCKERFILE=Dockerfile
 
 ##@ Default Goal
