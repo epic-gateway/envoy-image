@@ -1,6 +1,6 @@
 This is the Envoy used in the EGW.  
 
-Currently it mounts the envoy.yaml in a configmap
+It bootstraps its config from the container filesystem at the standard location: /etc/envoy/envoy.yaml.
 
 The container includes some basic stuff for troubleshooting networking not found in the containers from envoy
 

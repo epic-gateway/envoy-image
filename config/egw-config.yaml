@@ -7,7 +7,7 @@ admin:
       protocol: TCP
       address: 0.0.0.0
       port_value: 9901
-# Describes how to connect to the xDS control plane
+# how to connect to the xDS control plane (i.e., xds-operator)
 static_resources:
   clusters:
   - name: xds_cluster
@@ -45,7 +45,8 @@ dynamic_resources:
       set_node_on_first_message_only: true
 layered_runtime:
   layers:
-    - name: runtime-0
+    # our xds control plane is the baseline
+    - name: rtds_layer
       rtds_layer:
         rtds_config:
           resource_api_version: V3
@@ -55,4 +56,12 @@ layered_runtime:
             grpc_services:
               envoy_grpc:
                 cluster_name: xds_cluster
-        name: runtime-0
+    # config values on the envoy pod filesystem override the xds
+    # values. Look in the Dockerfile for an example of how this works
+    - name: disk_layer
+      disk_layer:
+        symlink_root: /etc/envoy/overrides/current
+        append_service_cluster: false
+    # this allows overrides using the admin console
+    - name: admin_layer
+      admin_layer: {}
