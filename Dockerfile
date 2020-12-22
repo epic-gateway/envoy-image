@@ -1,4 +1,5 @@
-FROM envoyproxy/envoy:v1.16-latest
+# FIXME: switch to our Envoy images, not envoy-for-egw
+FROM registry.gitlab.com/acnodal/envoy-for-egw:recovery
 
 # copy the bootstrap config to where envoy expects it to be
 COPY config/egw-config.yaml /etc/envoy/envoy.yaml
