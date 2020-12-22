@@ -1,7 +1,7 @@
 # you must also specify the node id and node cluster, e.g.,
 # --config-yaml '{"node":{"cluster":"egw-sample", "id":"egw-sample/sample-adhoc"}}'
 admin:
-  access_log_path: /tmp/admin_access.log
+  access_log_path: /dev/null
   address:
     socket_address:
       protocol: TCP
