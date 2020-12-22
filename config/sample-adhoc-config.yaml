@@ -25,6 +25,14 @@ static_resources:
                 address: 192.168.1.40
                 port_value: 30018
     http2_protocol_options: {}
+    upstream_connection_options:
+      # configure a TCP keep-alive to detect and reconnect to the admin
+      # server in the event of a TCP socket half open connection
+      tcp_keepalive:
+        keepalive_probes: 3
+        keepalive_time: 10
+        keepalive_interval: 5
+
 # Connect to the xDS control plane and download config from there
 dynamic_resources:
   cds_config:

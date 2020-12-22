@@ -7,6 +7,7 @@ admin:
       protocol: TCP
       address: 0.0.0.0
       port_value: 9901
+
 # how to connect to the xDS control plane (i.e., xds-operator)
 static_resources:
   clusters:
@@ -23,6 +24,14 @@ static_resources:
                 address: xds-operator.acnodal
                 port_value: 18000
     http2_protocol_options: {}
+    upstream_connection_options:
+      # configure a TCP keep-alive to detect and reconnect to the admin
+      # server in the event of a TCP socket half open connection
+      tcp_keepalive:
+        keepalive_probes: 3
+        keepalive_time: 10
+        keepalive_interval: 5
+
 # Connect to the xDS control plane and download config from there
 dynamic_resources:
   cds_config:
