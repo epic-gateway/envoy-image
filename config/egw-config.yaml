@@ -1,5 +1,5 @@
 # you must also specify the node id and node cluster, e.g.,
-# --config-yaml '{"node":{"cluster":"egw-sample", "id":"egw-sample/sample-adhoc"}}'
+# --config-yaml '{"node":{"cluster":"xds_cluster", "id":"egw-sample.sample-adhoc"}}'
 admin:
   access_log_path: /dev/null
   address:
@@ -8,7 +8,7 @@ admin:
       address: 0.0.0.0
       port_value: 9901
 
-# how to connect to the xDS control plane (i.e., xds-operator)
+# how to connect to the xDS control plane (i.e., marin3r-discoveryservice)
 static_resources:
   clusters:
   - name: xds_cluster
@@ -21,9 +21,17 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: xds-operator.egw
+                address: marin3r-discoveryservice
                 port_value: 18000
     http2_protocol_options: {}
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        '@type': type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+        common_tls_context:
+          tls_certificate_sds_secret_configs:
+            - sds_config:
+                path: /etc/envoy/bootstrap/tls_certificate_sds_secret.json
     upstream_connection_options:
       # configure a TCP keep-alive to detect and reconnect to the admin
       # server in the event of a TCP socket half open connection
@@ -34,36 +42,28 @@ static_resources:
 
 # Connect to the xDS control plane and download config from there
 dynamic_resources:
+  ads_config:
+    transport_api_version: V2
+    api_type: GRPC
+    grpc_services:
+      - envoy_grpc:
+          cluster_name: xds_cluster
   cds_config:
-    resource_api_version: V3
-    api_config_source:
-      api_type: GRPC
-      transport_api_version: V3
-      grpc_services:
-      - envoy_grpc:
-          cluster_name: xds_cluster
+    resource_api_version: V2
+    ads: {}
   lds_config:
-    resource_api_version: V3
-    api_config_source:
-      api_type: GRPC
-      transport_api_version: V3
-      grpc_services:
-      - envoy_grpc:
-          cluster_name: xds_cluster
+    resource_api_version: V2
+    ads: {}
 
 layered_runtime:
   layers:
-    # our xds control plane is the baseline
+    # the xds control plane is the baseline
     - name: rtds_layer
       rtds_layer:
+        name: runtime
         rtds_config:
-          resource_api_version: V3
-          api_config_source:
-            transport_api_version: V3
-            api_type: GRPC
-            grpc_services:
-              envoy_grpc:
-                cluster_name: xds_cluster
+          resource_api_version: V2
+          ads: {}
     # config values on the envoy pod filesystem override the xds
     # values. Look in the Dockerfile for an example of how this works
     - name: disk_layer
