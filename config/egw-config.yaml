@@ -64,12 +64,6 @@ layered_runtime:
         rtds_config:
           resource_api_version: V2
           ads: {}
-    # config values on the envoy pod filesystem override the xds
-    # values. Look in the Dockerfile for an example of how this works
-    - name: disk_layer
-      disk_layer:
-        symlink_root: /etc/envoy/overrides/current
-        append_service_cluster: false
     # this allows overrides using the admin console
     - name: admin_layer
       admin_layer: {}
