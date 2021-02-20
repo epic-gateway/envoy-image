@@ -1,0 +1,9 @@
+apiVersion: egw.acnodal.io/v1
+kind: LoadBalancer
+metadata:
+  namespace: egw-experiment
+  name: envoy2
+spec:
+  service-group: experiment
+  public-address: 192.168.42.242
+  public-ports: [18882]

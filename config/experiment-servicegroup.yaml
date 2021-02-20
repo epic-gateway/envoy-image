@@ -1,0 +1,6 @@
+apiVersion: egw.acnodal.io/v1
+kind: ServiceGroup
+metadata:
+  namespace: egw-experiment
+  name: experiment
+spec: {}

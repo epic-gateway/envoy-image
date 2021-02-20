@@ -1,0 +1,56 @@
+apiVersion: marin3r.3scale.net/v1alpha1
+kind: EnvoyConfig
+metadata:
+  name: sample
+  namespace: egw-sample
+spec:
+  nodeID: egw-sample.sample
+  serialization: yaml
+  envoyResources:
+    # secrets:
+    #   - name: sample-certificate
+    #     ref:
+    #       name: sample-certificate
+    #       namespace: default
+    clusters:
+      - name: sample
+        value: |
+          name: sample
+          connect_timeout: 2s
+          type: STRICT_DNS
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: sample
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: 172.30.254.22
+                          port_value: 8888
+    listeners:
+      - name: TCP-8088
+        value: |
+          name: TCP-8088
+          address:
+            socket_address:
+              address: 0.0.0.0
+              port_value: 8088
+          filter_chains:
+            - filters:
+              - name: envoy.http_connection_manager
+                typed_config:
+                  "@type": type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager
+                  stat_prefix: ingress_http
+                  route_config:
+                    name: local_route
+                    virtual_hosts:
+                      - name: sample
+                        domains: ["*"]
+                        routes:
+                          - match:
+                              prefix: "/"
+                            route:
+                              cluster: sample
+                  http_filters:
+                    - name: envoy.router

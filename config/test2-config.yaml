@@ -1,0 +1,59 @@
+node:
+  cluster: egw-experiment
+  id: egw-experiment/envoy2
+admin:
+  access_log_path: /tmp/admin_access_envoy2.log
+  address:
+    socket_address:
+      protocol: TCP
+      address: 0.0.0.0
+      port_value: 9902
+# Describes how to connect to the xDS control plane
+static_resources:
+  clusters:
+  - name: xds_cluster
+    connect_timeout: 1s
+    type: LOGICAL_DNS
+    load_assignment:
+      cluster_name: xds_cluster
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: localhost
+                port_value: 18000
+    http2_protocol_options: {}
+# Connect to the xDS control plane and download config from there
+dynamic_resources:
+  cds_config:
+    resource_api_version: V3
+    api_config_source:
+      api_type: GRPC
+      transport_api_version: V3
+      grpc_services:
+      - envoy_grpc:
+          cluster_name: xds_cluster
+      set_node_on_first_message_only: true
+  lds_config:
+    resource_api_version: V3
+    api_config_source:
+      api_type: GRPC
+      transport_api_version: V3
+      grpc_services:
+      - envoy_grpc:
+          cluster_name: xds_cluster
+      set_node_on_first_message_only: true
+layered_runtime:
+  layers:
+    - name: runtime-0
+      rtds_layer:
+        rtds_config:
+          resource_api_version: V3
+          api_config_source:
+            transport_api_version: V3
+            api_type: GRPC
+            grpc_services:
+              envoy_grpc:
+                cluster_name: xds_cluster
+        name: runtime-0
