@@ -1,5 +1,5 @@
 # you must also specify the node id and node cluster, e.g.,
-# --config-yaml '{"node":{"cluster":"xds_cluster", "id":"egw-sample.sample-adhoc"}}'
+# --config-yaml '{"node":{"cluster":"marin3r", "id":"egw-sample.sample-adhoc"}}'
 admin:
   access_log_path: /dev/null
   address:
@@ -11,12 +11,12 @@ admin:
 # how to connect to the xDS control plane (i.e., marin3r-discoveryservice)
 static_resources:
   clusters:
-  - name: xds_cluster
+  - name: marin3r
     connect_timeout: 1s
     type: LOGICAL_DNS
     respect_dns_ttl: true
     load_assignment:
-      cluster_name: xds_cluster
+      cluster_name: marin3r
       endpoints:
       - lb_endpoints:
         - endpoint:
@@ -40,15 +40,36 @@ static_resources:
         keepalive_probes: 3
         keepalive_time: 10
         keepalive_interval: 5
+  - name: epic_eds
+    connect_timeout: 1s
+    type: LOGICAL_DNS
+    respect_dns_ttl: true
+    load_assignment:
+      cluster_name: epic_eds
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: eds-control-plane.egw
+                port_value: 18000
+    http2_protocol_options: {}
+    upstream_connection_options:
+      # configure a TCP keep-alive to detect and reconnect to the admin
+      # server in the event of a TCP socket half open connection
+      tcp_keepalive:
+        keepalive_probes: 3
+        keepalive_time: 10
+        keepalive_interval: 5
 
-# Connect to the xDS control plane and download config from there
+# Connect to Marin3r and download config from there
 dynamic_resources:
   ads_config:
     transport_api_version: V2
     api_type: GRPC
     grpc_services:
-      - envoy_grpc:
-          cluster_name: xds_cluster
+    - envoy_grpc:
+        cluster_name: marin3r
   cds_config:
     resource_api_version: V2
     ads: {}
@@ -58,13 +79,11 @@ dynamic_resources:
 
 layered_runtime:
   layers:
-    # the xds control plane is the baseline
-    - name: rtds_layer
-      rtds_layer:
-        name: runtime
-        rtds_config:
-          resource_api_version: V2
-          ads: {}
-    # this allows overrides using the admin console
-    - name: admin_layer
-      admin_layer: {}
+  - name: marin3r  # marin3r is the baseline
+    rtds_layer:
+      name: runtime
+      rtds_config:
+        resource_api_version: V2
+        ads: {}
+  - name: admin    # the admin console allows overrides
+    admin_layer: {}
