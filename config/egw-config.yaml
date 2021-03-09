@@ -40,18 +40,18 @@ static_resources:
         keepalive_probes: 3
         keepalive_time: 10
         keepalive_interval: 5
-  - name: epic_eds
+  - name: endpoints
     connect_timeout: 1s
     type: LOGICAL_DNS
     respect_dns_ttl: true
     load_assignment:
-      cluster_name: epic_eds
+      cluster_name: endpoints
       endpoints:
       - lb_endpoints:
         - endpoint:
             address:
               socket_address:
-                address: eds-control-plane.egw
+                address: endpoints.epic
                 port_value: 18000
     http2_protocol_options: {}
     upstream_connection_options:
