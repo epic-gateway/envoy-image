@@ -54,6 +54,14 @@ static_resources:
                 address: endpoints.epic
                 port_value: 18000
     http2_protocol_options: {}
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        '@type': type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+        common_tls_context:
+          tls_certificate_sds_secret_configs:
+            - sds_config:
+                path: /etc/envoy/bootstrap/tls_certificate_sds_secret.json
     upstream_connection_options:
       # configure a TCP keep-alive to detect and reconnect to the admin
       # server in the event of a TCP socket half open connection
