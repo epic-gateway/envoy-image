@@ -1,6 +1,6 @@
-apiVersion: egw.acnodal.io/v1
+apiVersion: epic.acnodal.io/v1
 kind: ServiceGroup
 metadata:
-  namespace: egw-experiment
+  namespace: epic-experiment
   name: experiment
 spec: {}

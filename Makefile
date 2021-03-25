@@ -1,5 +1,5 @@
-REPO=registry.gitlab.com/acnodal
-PREFIX = envoy-for-egw
+REPO=registry.gitlab.com/acnodal/epic
+PREFIX = envoy
 SUFFIX = ${USER}-dev
 
 TAG=${REPO}/${PREFIX}:${SUFFIX}

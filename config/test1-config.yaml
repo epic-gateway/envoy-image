@@ -1,6 +1,6 @@
 node:
-  cluster: egw-experiment
-  id: egw-experiment/envoy1
+  cluster: epic-experiment
+  id: epic-experiment/envoy1
 admin:
   access_log_path: /tmp/admin_access_envoy1.log
   address:

@@ -2,9 +2,9 @@ apiVersion: marin3r.3scale.net/v1alpha1
 kind: EnvoyConfig
 metadata:
   name: sample
-  namespace: egw-sample
+  namespace: epic-sample
 spec:
-  nodeID: egw-sample.sample
+  nodeID: epic-sample.sample
   serialization: yaml
   envoyResources:
     # secrets:

@@ -1,7 +1,7 @@
 # this config lets you run Envoy ad-hoc and tells it to connect to the
-# EGW xDS control plane.  you must also specify the node id and node
+# EPIC xDS control plane.  you must also specify the node id and node
 # cluster, e.g.,
-# $ envoy --config-path=config/sample-adhoc-config.yaml --use-dynamic-base-id --config-yaml '{"node":{"cluster":"egw-sample", "id":"egw-sample/sample-adhoc"}}'
+# $ envoy --config-path=config/sample-adhoc-config.yaml --use-dynamic-base-id --config-yaml '{"node":{"cluster":"epic-sample", "id":"epic-sample/sample-adhoc"}}'
 admin:
   access_log_path: /tmp/admin_access_sample-acnodal.log
   address:

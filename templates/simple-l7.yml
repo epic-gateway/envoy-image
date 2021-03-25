@@ -1,4 +1,4 @@
-apiVersion: egw.acnodal.io/v1
+apiVersion: epic.acnodal.io/v1
 kind: ServiceGroup
 metadata:
   generation: 1
@@ -6,11 +6,11 @@ metadata:
     owning-account: sample
     owning-serviceprefix: default
   name: sample
-  namespace: egw-sample
+  namespace: epic-sample
 
 spec:
   auth-creds: fredfredfredfred
-  envoy-image: registry.gitlab.com/acnodal/envoy-for-egw:latest
+  envoy-image: registry.gitlab.com/acnodal/epic/envoy:latest
   envoy-template:
     envoyResources:
       clusters:

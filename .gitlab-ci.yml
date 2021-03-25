@@ -1,9 +1,9 @@
 docker:
-  image: docker:latest
+  image: docker:20.10.5
   services:
-  - docker:dind
+  - docker:20.10.5-dind
 
   script:
   - apk add make
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  - make SUFFIX=ci-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} GITLAB_AUTHN=gitlab-ci-token:${CI_JOB_TOKEN} install
+  - make SUFFIX=ci-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} GITLAB_USER=gitlab-ci-token GITLAB_PASSWORD=${CI_JOB_TOKEN} install

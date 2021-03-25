@@ -1,4 +1,4 @@
-This is the Envoy used in the EGW.  
+This is the Envoy used in the EPIC.  
 
 It bootstraps its config from the container filesystem at the standard location: /etc/envoy/envoy.yaml.
 

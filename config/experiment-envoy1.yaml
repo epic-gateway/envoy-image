@@ -1,7 +1,7 @@
-apiVersion: egw.acnodal.io/v1
+apiVersion: epic.acnodal.io/v1
 kind: LoadBalancer
 metadata:
-  namespace: egw-experiment
+  namespace: epic-experiment
   name: envoy1
 spec:
   service-group: experiment

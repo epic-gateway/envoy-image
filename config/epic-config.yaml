@@ -1,5 +1,5 @@
 # you must also specify the node id and node cluster, e.g.,
-# --config-yaml '{"node":{"cluster":"marin3r", "id":"egw-sample.sample-adhoc"}}'
+# --config-yaml '{"node":{"cluster":"marin3r", "id":"epic-sample.sample-adhoc"}}'
 admin:
   access_log_path: /dev/null
   address:
@@ -40,18 +40,18 @@ static_resources:
         keepalive_probes: 3
         keepalive_time: 10
         keepalive_interval: 5
-  - name: endpoints
+  - name: eds-server
     connect_timeout: 1s
     type: LOGICAL_DNS
     respect_dns_ttl: true
     load_assignment:
-      cluster_name: endpoints
+      cluster_name: eds-server
       endpoints:
       - lb_endpoints:
         - endpoint:
             address:
               socket_address:
-                address: endpoints.epic
+                address: eds-server.epic
                 port_value: 18000
     http2_protocol_options: {}
     transport_socket:
