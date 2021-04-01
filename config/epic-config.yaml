@@ -31,7 +31,8 @@ static_resources:
         '@type': type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         common_tls_context:
           tls_certificate_sds_secret_configs:
-            - sds_config:
+            - name: xds_client_certificate
+              sds_config:
                 path: /etc/envoy/bootstrap/tls_certificate_sds_secret.json
     upstream_connection_options:
       # configure a TCP keep-alive to detect and reconnect to the admin
@@ -60,7 +61,8 @@ static_resources:
         '@type': type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         common_tls_context:
           tls_certificate_sds_secret_configs:
-            - sds_config:
+            - name: xds_client_certificate
+              sds_config:
                 path: /etc/envoy/bootstrap/tls_certificate_sds_secret.json
     upstream_connection_options:
       # configure a TCP keep-alive to detect and reconnect to the admin
