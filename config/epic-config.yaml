@@ -28,7 +28,7 @@ static_resources:
     transport_socket:
       name: envoy.transport_sockets.tls
       typed_config:
-        '@type': type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+        '@type': type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         common_tls_context:
           tls_certificate_sds_secret_configs:
             - sds_config:
@@ -57,7 +57,7 @@ static_resources:
     transport_socket:
       name: envoy.transport_sockets.tls
       typed_config:
-        '@type': type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+        '@type': type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
         common_tls_context:
           tls_certificate_sds_secret_configs:
             - sds_config:
@@ -73,16 +73,16 @@ static_resources:
 # Connect to Marin3r and download config from there
 dynamic_resources:
   ads_config:
-    transport_api_version: V2
+    transport_api_version: V3
     api_type: GRPC
     grpc_services:
     - envoy_grpc:
         cluster_name: marin3r
   cds_config:
-    resource_api_version: V2
+    resource_api_version: V3
     ads: {}
   lds_config:
-    resource_api_version: V2
+    resource_api_version: V3
     ads: {}
 
 layered_runtime:
@@ -91,7 +91,7 @@ layered_runtime:
     rtds_layer:
       name: runtime
       rtds_config:
-        resource_api_version: V2
+        resource_api_version: V3
         ads: {}
   - name: admin    # the admin console allows overrides
     admin_layer: {}
