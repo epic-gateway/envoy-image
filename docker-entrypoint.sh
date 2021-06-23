@@ -1,15 +1,20 @@
 #!/usr/bin/env sh
 set -e
 
-# Get the pod CIDR from Calico
-POD_CIDR=$(calicoctl get ipPool default-ipv4-ippool --output=go-template="{{(index . 0).Spec.CIDR}}")
-# Set up a route to send pod traffic to the default interface
-ip route add "$POD_CIDR" dev eth0
+# If this is a TrueIngress LB, then set up routes to send traffic by
+# default through net1 (the TrueIngress/Multus interface) with pod
+# network traffic going through eth0, the k8s interface. TrueIngress
+# is the default, so it needs to be explicitly disabled.
+if [ "$TRUEINGRESS" != "disabled" ] ; then
+    # Get the pod CIDR from Calico
+    POD_CIDR=$(calicoctl get ipPool default-ipv4-ippool --output=go-template="{{(index . 0).Spec.CIDR}}")
+    # Set up a route to send pod traffic to the k8s/default interface
+    ip route add "$POD_CIDR" dev eth0
 
-# Set up a route to send traffic by default through net1, the True
-# Ingress interface
-ip route delete 0.0.0.0/0
-ip route add 0.0.0.0/0 dev net1
+    # set up routes to send traffic by default through net1
+    ip route delete 0.0.0.0/0
+    ip route add 0.0.0.0/0 dev net1
+fi
 
 loglevel="${loglevel:-}"
 
