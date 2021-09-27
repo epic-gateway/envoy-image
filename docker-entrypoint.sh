@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 set -e
 
+# Figure out eth0's IP address. This JQ query is more complex than it
+# should be because the "ip" command in the Envoy pods outputs a
+# couple of weird empty objects along with the eth0 object and we need
+# to handle that.
+ETH0_IP=$(ip -json addr show dev eth0 | jq --raw-output ".[].addr_info[] | select(.label==\"eth0\") | .local")
+echo eth0 IP address: $ETH0_IP
+
+# patch the Envoy bootstrap config to bind the admin interface to eth0 only
+sed --in-place=.bak "s/address: 0.0.0.0/address: ${ETH0_IP}/" /etc/envoy/envoy.yaml
+
 # If this is a TrueIngress LB, then set up routes to send traffic by
 # default through net1 (the TrueIngress/Multus interface) with pod and
 # internal service network traffic going through eth0, the k8s
