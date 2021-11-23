@@ -8,8 +8,8 @@ set -e
 ETH0_IP=$(ip -json addr show dev eth0 | jq --raw-output ".[].addr_info[] | select(.label==\"eth0\") | .local")
 echo eth0 IP address: $ETH0_IP
 
-# patch the Envoy bootstrap config to bind the admin interface to eth0 only
-sed --in-place=.bak "s/address: 0.0.0.0/address: ${ETH0_IP}/" /etc/envoy/envoy.yaml
+# patch Marin3r's Envoy bootstrap config to bind the admin interface to eth0 only
+sed --in-place=.bak "s/\"address\":\"0.0.0.0\"/\"address\":\"${ETH0_IP}\"/" /etc/envoy/bootstrap/config.json
 
 # If this is a TrueIngress LB, then set up routes to send traffic by
 # default through net1 (the TrueIngress/Multus interface) with pod and
