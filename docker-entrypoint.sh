@@ -28,6 +28,12 @@ if [ "$TRUEINGRESS" != "disabled" ] ; then
         ip route add "$SERVICE_CIDR" dev eth0
     fi
 
+    # If the HOST_IP env var is set, add a route to send internal
+    # service traffic to the k8s/default interface
+    if [ "X$HOST_IP" != "X" ] ; then
+        ip route add "$HOST_IP" dev eth0
+    fi
+
     # set up routes to send traffic by default through net1
     ip route delete 0.0.0.0/0
     ip route add 0.0.0.0/0 dev net1
