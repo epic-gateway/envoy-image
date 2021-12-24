@@ -3,9 +3,6 @@ FROM envoyproxy/envoy:v1.20.0
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
-# copy the bootstrap config to where envoy expects it to be
-COPY config/epic-config.yaml /etc/envoy/envoy.yaml
-
 # install some useful debugging tools
 RUN apt-get update && apt-get -q install -y \
     curl iproute2 tcpdump iputils-ping telnet jq
