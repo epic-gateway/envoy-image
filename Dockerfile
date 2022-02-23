@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy:v1.20.1
+FROM envoyproxy/envoy:v1.20.2
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
