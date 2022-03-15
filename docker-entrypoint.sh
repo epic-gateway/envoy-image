@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 set -e
 
 # Figure out eth0's IP address. This JQ query is more complex than it
@@ -20,14 +20,20 @@ if [ "$TRUEINGRESS" != "disabled" ] ; then
     # If the POD_CIDR env var is set then re-do the route that sends
     # internal pod traffic so it goes to the k8s/default interface
     if [ "X$POD_CIDR" != "X" ] ; then
-        ip route del "$POD_CIDR"
-        ip route add "$POD_CIDR" dev eth0
+        IFS=',' read -ra addrs <<< "$POD_CIDR"
+        for addr in "${addrs[@]}" ; do
+            ip route del "$addr" || true
+            ip route add "$addr" dev eth0
+        done
     fi
 
     # If the SERVICE_CIDR env var is set, add a route to send internal
     # service traffic to the k8s/default interface
     if [ "X$SERVICE_CIDR" != "X" ] ; then
-        ip route add "$SERVICE_CIDR" dev eth0
+        IFS=',' read -ra addrs <<< "$SERVICE_CIDR"
+        for addr in "${addrs[@]}" ; do
+            ip route add "$addr" dev eth0
+        done
     fi
 
     # If the HOST_IP env var is set, add a route to send internal
