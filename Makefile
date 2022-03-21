@@ -1,4 +1,4 @@
-REPO=registry.gitlab.com/acnodal/epic
+REPO ?= registry.gitlab.com/acnodal/epic
 PREFIX = envoy
 SUFFIX = ${USER}-dev
 
