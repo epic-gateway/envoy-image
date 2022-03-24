@@ -42,6 +42,12 @@ if [ "$TRUEINGRESS" != "disabled" ] ; then
         ip route add "$HOST_IP" dev eth0
     fi
 
+    # We don't want a default route through eth0 so we delete one if
+    # it's there.
+    ip -6 route delete default dev eth0 || true
+    # We don't need to add a default through net1 - radvd does that
+    # for us.
+
     # set up routes to send traffic by default through net1
     ip route delete 0.0.0.0/0
     ip route add 0.0.0.0/0 dev net1
