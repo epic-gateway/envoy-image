@@ -17,16 +17,6 @@ sed --in-place=.bak "s/\"address\":\"0.0.0.0\"/\"address\":\"${ETH0_IP}\"/" /etc
 # interface. TrueIngress is the default, so it needs to be explicitly
 # disabled.
 if [ "$TRUEINGRESS" != "disabled" ] ; then
-    # If the POD_CIDR env var is set then re-do the route that sends
-    # internal pod traffic so it goes to the k8s/default interface
-    if [ "X$POD_CIDR" != "X" ] ; then
-        IFS=',' read -ra addrs <<< "$POD_CIDR"
-        for addr in "${addrs[@]}" ; do
-            ip route del "$addr" || true
-            ip route add "$addr" dev eth0
-        done
-    fi
-
     # If the SERVICE_CIDR env var is set, add a route to send internal
     # service traffic to the k8s/default interface
     if [ "X$SERVICE_CIDR" != "X" ] ; then
