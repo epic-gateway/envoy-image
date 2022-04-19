@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 # Figure out eth0's IP address. This JQ query is more complex than it
 # should be because the "ip" command in the Envoy pods outputs a
