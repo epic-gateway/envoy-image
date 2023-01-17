@@ -5,7 +5,7 @@ RUN chmod +x /docker-entrypoint.sh
 
 # install some useful debugging tools
 RUN apt-get update && apt-get -q install -y \
-    curl iproute2 tcpdump iputils-ping telnet jq
+    curl iproute2 tcpdump iputils-ping telnet jq socat
 
 RUN setcap cap_net_bind_service=+ep /usr/local/bin/envoy
 
