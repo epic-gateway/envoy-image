@@ -20,4 +20,4 @@ docker:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
   script:
-  - make SUFFIX=${TAG_SPECIFIC} GITLAB_USER=gitlab-ci-token GITLAB_PASSWORD=${CI_JOB_TOKEN} install
+  - make SUFFIX=${TAG_SPECIFIC} GITLAB_USER=gitlab-ci-token GITLAB_PASSWORD=${CI_JOB_TOKEN} docker-build docker-push
